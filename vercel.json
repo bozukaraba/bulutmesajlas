@@ -2,14 +2,14 @@
     "version": 2,
     "builds": [
         {
-            "src": "api/index.php",
-            "use": "vercel-php@0.6.0"
+            "src": "public/index.php",
+            "use": "@vercel/php"
         }
     ],
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "/api/index.php",
+            "dest": "/public/index.php",
             "headers": {
                 "Access-Control-Allow-Origin": "https://bulutmesajlas.vercel.app",
                 "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
