@@ -1,9 +1,9 @@
 services:
   - type: web
     name: bulutmesaj-backend
-    env: php
-    buildCommand: composer install
-    startCommand: vendor/bin/heroku-php-apache2
+    env: docker
+    buildCommand: docker build -t bulutmesaj-backend .
+    startCommand: docker run -p $PORT:80 bulutmesaj-backend
     envVars:
       - key: NODE_ENV
         value: production 
