@@ -7,8 +7,8 @@
     },
     "routes": [
         {
-            "src": "/(.*)",
-            "dest": "/public/index.php",
+            "src": "/api/(.*)",
+            "dest": "/api/index.php",
             "headers": {
                 "Access-Control-Allow-Origin": "https://bulutmesajlas.vercel.app",
                 "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
