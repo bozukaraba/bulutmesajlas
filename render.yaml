@@ -1,9 +1,9 @@
 services:
   - type: web
-    name: bulutmesajlas
+    name: bulutmesaj-backend
     env: php
     buildCommand: composer install
-    startCommand: php -S 0.0.0.0:$PORT -t public
+    startCommand: vendor/bin/heroku-php-apache2
     envVars:
-      - key: PORT
-        value: 8000 
+      - key: NODE_ENV
+        value: production 
