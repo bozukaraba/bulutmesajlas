@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
     Box,
     Grid,
@@ -9,8 +9,7 @@ import {
     IconButton,
     Text,
     Avatar,
-    useToast,
-    Divider
+    useToast
 } from '@chakra-ui/react';
 import { IoSend } from 'react-icons/io5';
 import { useAuth } from '../context/AuthContext';
@@ -40,11 +39,38 @@ const Chat: React.FC = () => {
     const { socket, sendMessage, startTyping, stopTyping } = useWebSocket();
     const toast = useToast();
 
-    useEffect(() => {
-        if (selectedUser) {
-            loadMessages();
+    const loadMessages = useCallback(async () => {
+        if (!selectedUser) return;
+        
+        try {
+            const response = await messageApi.getConversation(selectedUser);
+            setMessages(response.data);
+        } catch (error) {
+            toast({
+                title: 'Hata',
+                description: 'Mesajlar yüklenirken bir hata oluştu',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    }, [selectedUser, toast]);
+
+    const handleNewMessage = useCallback((message: Message) => {
+        if (message.sender_id === selectedUser || message.sender_id === user?.id) {
+            setMessages(prev => [...prev, message]);
+        }
+    }, [selectedUser, user?.id]);
+
+    const handleTypingStatus = useCallback((data: { sender: number; isTyping: boolean }) => {
+        if (data.sender === selectedUser) {
+            setIsTyping(data.isTyping);
         }
     }, [selectedUser]);
+
+    useEffect(() => {
+        loadMessages();
+    }, [loadMessages]);
 
     useEffect(() => {
         if (socket) {
@@ -56,38 +82,11 @@ const Chat: React.FC = () => {
                 socket.off('typing');
             };
         }
-    }, [socket]);
+    }, [socket, handleNewMessage, handleTypingStatus]);
 
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
-
-    const loadMessages = async () => {
-        try {
-            const response = await messageApi.getConversation(selectedUser!);
-            setMessages(response.data);
-        } catch (error) {
-            toast({
-                title: 'Hata',
-                description: 'Mesajlar yüklenirken bir hata oluştu',
-                status: 'error',
-                duration: 3000,
-                isClosable: true,
-            });
-        }
-    };
-
-    const handleNewMessage = (message: Message) => {
-        if (message.sender_id === selectedUser || message.sender_id === user?.id) {
-            setMessages(prev => [...prev, message]);
-        }
-    };
-
-    const handleTypingStatus = (data: { sender: number; isTyping: boolean }) => {
-        if (data.sender === selectedUser) {
-            setIsTyping(data.isTyping);
-        }
-    };
 
     const handleSendMessage = async () => {
         if (!newMessage.trim() || !selectedUser) return;
