@@ -37,7 +37,7 @@ interface Conversation {
 }
 
 const api = axios.create({
-    baseURL: process.env.REACT_APP_API_URL || 'https://api.bulutmesajlas.com/api',
+    baseURL: process.env.REACT_APP_API_URL || 'https://bulutmesaj.vercel.app/api',
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
