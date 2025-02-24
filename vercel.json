@@ -1,13 +1,14 @@
 {
     "version": 2,
-    "functions": {
-        "api/*.php": {
-            "runtime": "vercel-php@0.6.0"
+    "builds": [
+        {
+            "src": "api/index.php",
+            "use": "vercel-php@0.6.0"
         }
-    },
+    ],
     "routes": [
         {
-            "src": "/api/(.*)",
+            "src": "/(.*)",
             "dest": "/api/index.php",
             "headers": {
                 "Access-Control-Allow-Origin": "https://bulutmesajlas.vercel.app",
