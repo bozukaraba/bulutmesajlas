@@ -39,17 +39,44 @@ const Register: React.FC = () => {
             return;
         }
 
+        if (password.length < 8) {
+            toast({
+                title: 'Hata',
+                description: 'Şifre en az 8 karakter olmalıdır',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
+            return;
+        }
+
+        if (!email.includes('@')) {
+            toast({
+                title: 'Hata',
+                description: 'Geçerli bir email adresi giriniz',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
+            return;
+        }
+
         setIsLoading(true);
 
         try {
+            console.log('Kayıt isteği gönderiliyor:', { username, email });
             await register(username, email, password);
+            console.log('Kayıt başarılı');
             navigate('/');
         } catch (error: any) {
+            console.error('Kayıt hatası:', error);
+            const errorMessage = error.response?.data?.error || error.message || 'Kayıt başarısız';
+            console.error('Hata detayı:', errorMessage);
             toast({
                 title: 'Hata',
-                description: error.response?.data?.error || 'Kayıt başarısız',
+                description: errorMessage,
                 status: 'error',
-                duration: 3000,
+                duration: 5000,
                 isClosable: true,
             });
         } finally {
@@ -75,6 +102,7 @@ const Register: React.FC = () => {
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                                 placeholder="Kullanıcı adınız"
+                                minLength={3}
                             />
                         </FormControl>
 
@@ -95,6 +123,7 @@ const Register: React.FC = () => {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Şifreniz"
+                                minLength={8}
                             />
                         </FormControl>
 
@@ -105,6 +134,7 @@ const Register: React.FC = () => {
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 placeholder="Şifrenizi tekrar girin"
+                                minLength={8}
                             />
                         </FormControl>
 
