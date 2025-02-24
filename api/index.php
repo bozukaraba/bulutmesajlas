@@ -29,6 +29,12 @@ $app->options('/{routes:.+}', function (Request $request, Response $response) {
 // Add error middleware
 $app->addErrorMiddleware(true, true, true);
 
+// Test route
+$app->get('/api/test', function (Request $request, Response $response) {
+    $response->getBody()->write(json_encode(['status' => 'ok']));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
 // Routes
 require __DIR__ . '/../src/routes/api.php';
 
