@@ -4,7 +4,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
 $app = AppFactory::create();
 
@@ -15,7 +15,7 @@ $app->addRoutingMiddleware();
 $app->add(function (Request $request, $handler) {
     $response = $handler->handle($request);
     return $response
-        ->withHeader('Access-Control-Allow-Origin', 'https://bulutmesajlas.vercel.app')
+        ->withHeader('Access-Control-Allow-Origin', 'https://bulutmesaj-jegnope5s-ugurs-projects-3a76946a.vercel.app')
         ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
         ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS')
         ->withHeader('Access-Control-Allow-Credentials', 'true');
@@ -36,6 +36,6 @@ $app->get('/api/test', function (Request $request, Response $response) {
 });
 
 // Routes
-require __DIR__ . '/../src/routes/api.php';
+require __DIR__ . '/src/routes/api.php';
 
 $app->run(); 
