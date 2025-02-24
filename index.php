@@ -14,11 +14,21 @@ $app->addRoutingMiddleware();
 // CORS middleware - moved before routes
 $app->add(function (Request $request, $handler) {
     $response = $handler->handle($request);
-    return $response
-        ->withHeader('Access-Control-Allow-Origin', 'https://bulutmesaj-jegnope5s-ugurs-projects-3a76946a.vercel.app')
-        ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-        ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS')
-        ->withHeader('Access-Control-Allow-Credentials', 'true');
+    $origin = $request->getHeaderLine('Origin');
+    $allowedOrigins = [
+        'https://bulutmesaj-jegnope5s-ugurs-projects-3a76946a.vercel.app',
+        'https://bulutmesaj.vercel.app'
+    ];
+    
+    if (in_array($origin, $allowedOrigins)) {
+        return $response
+            ->withHeader('Access-Control-Allow-Origin', $origin)
+            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS')
+            ->withHeader('Access-Control-Allow-Credentials', 'true');
+    }
+    
+    return $response;
 });
 
 // OPTIONS request handler
